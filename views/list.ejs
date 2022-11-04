@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- My style -->
+    <link rel="stylesheet" href="../public/main.css">
+
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <%- include('nav.html') %>
+
+    <h4 class="ml-2 my-3 text-center">To Do List</h4>
+
+
+    <!-- ejs에서 서버에서 보낸 것들이나 함수를 이용할 때 
+    <%= %> : 일반 서버데이터
+    <% %> : 함수 -->
+
+    <div class="container">
+        <ul class="list-group">
+            <% for (var i = 0; i < posts.length; i++){ %>
+            <li class="list-group-item">
+                
+                    <p> No. <%= posts[i]._id %></p>
+                    <h4> Title : <%= posts[i].title %> </h4>
+                    <p> Date : <%= posts[i].date %> </p>
+                    <!-- 글 번호를 노출하고 싶지 않을 경우, data-id 속성을 이용한다. -->
+                    <button class="delete btn-danger" data-id="<%= posts[i]._id %>">Del</button>
+                    <button class="edit btn-primary" data-id="<%= posts[i]._id %>" onclick="location.href='/edit/<%= posts[i]._id %>'">Edit</button>
+                
+            </li>
+            <% } %>
+        </ul>
+    </div>
+    <!-- JQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js">
+    </script>
+
+
+    <script>
+        //DELETE와 PUT 요청은 html만으로는 할 수 없다. 그래서 두가지 방법이 있는데,
+        // 1. method-override라는 라이브러리 이용
+        // 2. AJAX를 이용하는 방법, 여기서는 AJAX를 이용한다.
+        // AJAX란? JS로 서버와 통신하는걸 도와줌. 새로고침 없이도 가능
+
+        $('.delete').click(function (e) {
+            // e는 click, hover 등 이벤트가 발생한 이벤트 객체가 된다. 즉, 여기서는 .delete 클래스가 있는 태그들에 속한 부분이 객체가 되어 e에 들어간다.
+            // e.target은 클릭한 요소, dataset.id는 data-id를 뜻한다.
+            var postNumber = e.target.dataset.id,
+                currentPost = $(this);
+            $.ajax({
+                // 요청 내용
+                method: 'DELETE',
+                // 요청 경로
+                url: '/delete/' + postNumber,
+                // 요청시 함께 보낼 데이터
+                data: {
+                    // _id: postNumber
+                    // url의 파라미터를 이용하지 않고 data에 아이디를 넣어서 보낼 수도 있다.
+                }
+            }).done(function (result) {
+                // .done(결과 데이터) : 요청이 성공 했을 때
+                // AJAX는 새로고침이 없이 실행하기 때문에 사용자 입장에서 변화가 없다. 따라서 따로 새로고침 설정(location.reload) 또는 사용자 입장에서 변화를 만들어 주어야 한다.
+                console.log("Success!!");
+                // currentPost가 button이므로 li를 지우기 위해서 parent()를 이용하였다.
+                currentPost.parent('li').fadeOut();
+
+            }).fail(function (xhr, code, err) {
+                // .fail(XMLHttpRequest(몰라도됨), 에러코드, 에러메세지) : 요청이 실패했을 때
+                console.log(xhr, code, err);
+            });
+        });
+    </script>
+
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
+    </script>
+
+</body>
+
+</html>
