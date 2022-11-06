@@ -28,16 +28,16 @@
     <div class="container">
         <ul class="list-group">
             <% for (var i = 0; i < posts.length; i++){ %>
-            <li class="list-group-item">
-                
+            <a href="/detail/<%= posts[i]._id %>">
+                <li class="list-group-item">
+
                     <p> No. <%= posts[i]._id %></p>
                     <h4> Title : <%= posts[i].title %> </h4>
                     <p> Date : <%= posts[i].date %> </p>
-                    <!-- 글 번호를 노출하고 싶지 않을 경우, data-id 속성을 이용한다. -->
-                    <button class="delete btn-danger" data-id="<%= posts[i]._id %>">Del</button>
-                    <button class="edit btn-primary" data-id="<%= posts[i]._id %>" onclick="location.href='/edit/<%= posts[i]._id %>'">Edit</button>
-                
-            </li>
+                    
+
+                </li>
+            </a>
             <% } %>
         </ul>
     </div>

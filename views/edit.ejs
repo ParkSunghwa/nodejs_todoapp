@@ -18,29 +18,27 @@
 <body>
   <%- include('nav.html') %>
 
-  <h4 class="ml-2 my-3 text-center">Write</h4>
+  <h4 class="ml-2 my-3 text-center">Edit</h4>
   <!-- post요청을 위해 form 태그에 action과 method를 작성해야한다. 그리고 각각의 input에는 name을 입력한다. -->
   <div class="container mt-3">
-    <form action="/add" method="POST">
+    <form action="/edit?_method=PUT" method="POST">
       <div class="form-group">
         <label>Title</label>
-        <input type="text" class="form-control" name="title" placeholder="title">
+        <input type="text" name="id" style="display:none;" value="<%= data._id %>">
+        <input type="text" class="form-control" name="title" value="<%= data._title %>">
       </div>
       <div class="form-group">
         <label>Date</label>
-        <input type="date" class="form-control" name="date" id="currentDate">
+        <input type="date" class="form-control" name="date" value="<%= data._date %>">
       </div>
       <div class="form-group">
         <label>Content</label>
-        <textarea name="content" class="form-control" cols="30" rows="10" placeholder="content"></textarea>
+        <textarea name="content" class="form-control" cols="30" rows="10" value="<%= data._content %>"></textarea>
         <!-- <input type="textarea" class="form-control" name="content"> -->
       </div>
       <button type="submit" class="btn btn-outline-secondary">Submit</button>
     </form>
   </div>
-  <script>
-    document.getElementById('currentDate').value = new Date().toISOString().slice(0, 10);
-  </script>
 
   <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
